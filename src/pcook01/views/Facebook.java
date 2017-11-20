@@ -17,6 +17,9 @@ import javax.swing.Box;
 public class Facebook {
 
 	private JFrame frame;
+	private TopPanel topPanel;
+	private SidePanel sidePanel;
+	private CenterPanel centerPanel;
 
 	/**
 	 * Launch the application.
@@ -27,6 +30,7 @@ public class Facebook {
 				try {
 					Facebook window = new Facebook();
 					window.frame.setVisible(true);
+					window.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -38,6 +42,10 @@ public class Facebook {
 	 * Create the application.
 	 */
 	public Facebook() {
+		topPanel = new TopPanel();
+		sidePanel = new SidePanel();
+		centerPanel = new CenterPanel();
+		
 		initialize();
 	}
 
@@ -48,85 +56,87 @@ public class Facebook {
 		frame = new JFrame();
 		frame.setSize(800, 600);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
-		//JPanel sidePanel = new JPanel();
 		frame.getContentPane().add(sidePanel, BorderLayout.WEST);
+		frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
+		frame.getContentPane().add(topPanel, BorderLayout.NORTH);
+		topPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
+		//JPanel sidePanel = new JPanel();
 		
 		
 		//JPanel userPanel = new JPanel();
 		//sidePanel.add(userPanel, BorderLayout.NORTH);
 		
-		JLabel userHeader = new JLabel("User Name");
-		userPanel.add(userHeader);
+		//JLabel userHeader = new JLabel("User Name");
+		//userPanel.add(userHeader);
 		
 		//JPanel friendsPanel = new JPanel();
 		//sidePanel.add(friendsPanel, BorderLayout.CENTER);
 		
-		JLabel friendsHeader = new JLabel("Friends");
-		friendsPanel.add(friendsHeader);
+		//JLabel friendsHeader = new JLabel("Friends");
+		//friendsPanel.add(friendsHeader);
 		
-		JPanel topPanel = new JPanel();
-		topPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
-		frame.getContentPane().add(topPanel, BorderLayout.NORTH);
-		topPanel.setLayout(new GridLayout(0, 2, 0, 0));
+		//JPanel topPanel = new JPanel();
 		
-		JLabel appNameHeader = new JLabel("Facebook");
-		topPanel.add(appNameHeader);
+		//
+		//topPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JPanel MenuBarRightPanel = new JPanel();
-		MenuBarRightPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
-		FlowLayout fl_MenuBarRightPanel = (FlowLayout) MenuBarRightPanel.getLayout();
-		fl_MenuBarRightPanel.setAlignment(FlowLayout.RIGHT);
-		topPanel.add(MenuBarRightPanel);
+		//JLabel appNameHeader = new JLabel("Facebook");
+		//topPanel.add(appNameHeader);
 		
-		JButton settingsButton = new JButton("Settings");
-		MenuBarRightPanel.add(settingsButton);
+		//JPanel MenuBarRightPanel = new JPanel();
+		//MenuBarRightPanel.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
+		//FlowLayout fl_MenuBarRightPanel = (FlowLayout) MenuBarRightPanel.getLayout();
+		//fl_MenuBarRightPanel.setAlignment(FlowLayout.RIGHT);
+		//topPanel.add(MenuBarRightPanel);
 		
-		JButton signoutButton = new JButton("Signout");
-		MenuBarRightPanel.add(signoutButton);
+		//JButton settingsButton = new JButton("Settings");
+		//MenuBarRightPanel.add(settingsButton);
 		
-		JPanel centerPanel = new JPanel();
-		frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
-		centerPanel.setLayout(new BorderLayout(0, 0));
+		//JButton signoutButton = new JButton("Signout");
+		//MenuBarRightPanel.add(signoutButton);
 		
-		JPanel newPostPanel = new JPanel();
-		centerPanel.add(newPostPanel, BorderLayout.NORTH);
-		newPostPanel.setLayout(new BorderLayout(0, 0));
+		//JPanel centerPanel = new JPanel();
 		
-		JLabel newPostHeader = new JLabel("Make Post");
-		newPostPanel.add(newPostHeader, BorderLayout.NORTH);
+		//centerPanel.setLayout(new BorderLayout(0, 0));
 		
-		JTextPane newPostTextPane = new JTextPane();
-		newPostTextPane.setText("Whats on your mind?");
-		newPostPanel.add(newPostTextPane, BorderLayout.CENTER);
+		//JPanel newPostPanel = new JPanel();
+		//centerPanel.add(newPostPanel, BorderLayout.NORTH);
+		//newPostPanel.setLayout(new BorderLayout(0, 0));
 		
-		JButton newPostButton = new JButton("Post");
-		newPostPanel.add(newPostButton, BorderLayout.EAST);
+		//JLabel newPostHeader = new JLabel("Make Post");
+		//newPostPanel.add(newPostHeader, BorderLayout.NORTH);
 		
-		Component verticalStrut = Box.createVerticalStrut(20);
-		newPostPanel.add(verticalStrut, BorderLayout.SOUTH);
+		//JTextPane newPostTextPane = new JTextPane();
+		//newPostTextPane.setText("Whats on your mind?");
+		//newPostPanel.add(newPostTextPane, BorderLayout.CENTER);
 		
-		JPanel newsFeedWrapperPanel = new JPanel();
-		centerPanel.add(newsFeedWrapperPanel, BorderLayout.CENTER);
-		newsFeedWrapperPanel.setLayout(new BorderLayout(0, 0));
+		//JButton newPostButton = new JButton("Post");
+		//newPostPanel.add(newPostButton, BorderLayout.EAST);
 		
-		JLabel newsFeedHeader = new JLabel("News Feed");
-		newsFeedWrapperPanel.add(newsFeedHeader, BorderLayout.NORTH);
+		//Component verticalStrut = Box.createVerticalStrut(20);
+		//newPostPanel.add(verticalStrut, BorderLayout.SOUTH);
 		
-		JPanel newsFeedPanel = new JPanel();
-		newsFeedWrapperPanel.add(newsFeedPanel, BorderLayout.CENTER);
-		newsFeedPanel.setLayout(new GridLayout(2, 1, 0, 0));
+		//JPanel newsFeedWrapperPanel = new JPanel();
+		//centerPanel.add(newsFeedWrapperPanel, BorderLayout.CENTER);
+		//newsFeedWrapperPanel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel examplePostPanel = new JPanel();
-		newsFeedPanel.add(examplePostPanel);
-		examplePostPanel.setLayout(new BorderLayout(0, 0));
+		//JLabel newsFeedHeader = new JLabel("News Feed");
+		//newsFeedWrapperPanel.add(newsFeedHeader, BorderLayout.NORTH);
 		
-		JLabel user = new JLabel("User Posting");
-		examplePostPanel.add(user, BorderLayout.NORTH);
+		//JPanel newsFeedPanel = new JPanel();
+		//newsFeedWrapperPanel.add(newsFeedPanel, BorderLayout.CENTER);
+		//newsFeedPanel.setLayout(new GridLayout(2, 1, 0, 0));
 		
-		JTextPane userPostTextPane = new JTextPane();
-		userPostTextPane.setText("Example post by some creative human being!");
-		examplePostPanel.add(userPostTextPane, BorderLayout.CENTER);
+		//JPanel examplePostPanel = new JPanel();
+		//newsFeedPanel.add(examplePostPanel);
+		//examplePostPanel.setLayout(new BorderLayout(0, 0));
+		
+		//JLabel user = new JLabel("User Posting");
+		//examplePostPanel.add(user, BorderLayout.NORTH);
+		
+		//JTextPane userPostTextPane = new JTextPane();
+		//userPostTextPane.setText("Example post by some creative human being!");
+		//examplePostPanel.add(userPostTextPane, BorderLayout.CENTER);
 	}
 
 }

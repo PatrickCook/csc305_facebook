@@ -1,19 +1,20 @@
 package pcook01.views;
 
-import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class SidePanel extends JPanel {
 	private UserPanel userPanel;
-	private FriendsPanel friendsPanel;
+	private FriendList friendsPanel;
 	
 	public SidePanel() {
 		userPanel = new UserPanel();
-		friendsPanel = new FriendsPanel();
+		friendsPanel = new FriendList();
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		setLayout(new BorderLayout(0, 0));
-		this.add(userPanel, BorderLayout.NORTH);
-		this.add(friendsPanel, BorderLayout.CENTER);
+		this.add(userPanel);
+		this.add(friendsPanel);
+	
 	}
 }
