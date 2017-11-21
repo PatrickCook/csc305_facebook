@@ -1,5 +1,7 @@
 package pcook01.models;
 
+import singletons.FacebookDB;
+
 public class User {
 	private String name;
 	private String username;
@@ -52,5 +54,9 @@ public class User {
 		this.profileImgUrl = profileImgUrl;
 	}
 	
-	
+	public boolean validateUser(String username, String password) {
+		FacebookDB db = FacebookDB.getInstance();
+		
+		return db.validateUser(username, password);
+	}
 }
