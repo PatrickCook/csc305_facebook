@@ -10,7 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import pcook01.models.Post;
+import pcook01.models.User;
 import singletons.Decorator;
+import singletons.FacebookDB;
 
 public class NewsFeedPanel extends JPanel {
 	private ArrayList<NewsFeedPostPanel> newsFeed;
@@ -34,21 +37,21 @@ public class NewsFeedPanel extends JPanel {
 		add(scrollable, BorderLayout.CENTER);
 		
 		newsFeed = new ArrayList<>();
-		newsFeed.add(new NewsFeedPostPanel());
-		newsFeed.add(new NewsFeedPostPanel());
-		newsFeed.add(new NewsFeedPostPanel());
-		
-		refreshNewsFeed();
 	}
 	
-	/* Removes all posts and refreshes */
-	public void refreshNewsFeed() {
-		newsFeedPanel.removeAll();
-		newsFeedPanel.setLayout(new GridLayout(newsFeed.size(), 1, 0, 50));
+	public void populateNewsFeed(User user) {
+		FacebookDB db = FacebookDB.getInstance();
+		ArrayList<Post> posts = db.getAllPosts(user);
 		
-		for (Iterator<NewsFeedPostPanel> i = newsFeed.iterator(); i.hasNext(); ) {
-			NewsFeedPostPanel post = i.next();
-			newsFeedPanel.add(post);
+		newsFeedPanel.removeAll();
+		newsFeedPanel.setLayout(new GridLayout(posts.size(), 1, 0, 25));
+		newsFeed.clear();
+		
+		for (Iterator<Post> i = posts.iterator(); i.hasNext(); ) {
+			Post post = i.next();
+			NewsFeedPostPanel panel = new NewsFeedPostPanel(post);
+			newsFeedPanel.add(panel);
 		}
+		
 	}
 }

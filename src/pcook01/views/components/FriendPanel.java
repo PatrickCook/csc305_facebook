@@ -14,7 +14,7 @@ public class FriendPanel extends JPanel {
 	
 	public FriendPanel(User friend) {
 		this.friend = friend;
-		this.friendName = new JLabel(friend.getName());
+		this.friendName = new JLabel(friend.getUsername());
 		this.add(friendName);
 		this.setBackground(Color.WHITE);
 	}

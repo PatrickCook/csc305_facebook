@@ -3,6 +3,9 @@ package pcook01.views.components;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -13,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import singletons.Decorator;
 
-public class NewPostPanel extends JPanel {
+public class NewPostPanel extends JPanel implements FocusListener {
 	private JLabel newPostHeader;
 	private JTextPane newPostTextPane;
 	private JButton newPostButton;
@@ -30,9 +33,30 @@ public class NewPostPanel extends JPanel {
 		newPostTextPane.setText("Whats on your mind?");
 		newPostButton = new JButton("Post");
 		
+		newPostTextPane.addFocusListener(this);
+		
 		add(newPostHeader, BorderLayout.NORTH);
 		add(newPostTextPane, BorderLayout.CENTER);
 		add(newPostButton, BorderLayout.EAST);
 		add(verticalStrut, BorderLayout.SOUTH);
 	}
-}
+	
+	
+	
+	public void addNewPostListener(ActionListener e) {
+		newPostButton.addActionListener(e);
+	}
+	
+	public String getNewPostText() {
+		return newPostTextPane.getText();
+	}
+
+	public void focusGained(FocusEvent e) {
+		newPostTextPane.setText("");
+	}
+	
+	@Override
+	public void focusLost(FocusEvent e) {
+		
+	}
+	}

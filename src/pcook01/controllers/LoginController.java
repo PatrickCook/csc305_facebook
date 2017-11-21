@@ -35,11 +35,12 @@ public class LoginController {
             password = view.getPasswordInput();
             
             FacebookDB db = FacebookDB.getInstance();
-            if (db.validateUser(username, password)) {
+            
+            if (db.validateUser(model, username, password)) {        		
             		parent.changeState(State.HOME);
-            		model.setUsername(username);
             } else {
-            		JOptionPane.showMessageDialog(view, "Incorrect username/password.");
+            		JOptionPane.showMessageDialog(view, 
+            				"Incorrect username/password.");
             }
         }
     }

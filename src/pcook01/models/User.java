@@ -1,33 +1,37 @@
 package pcook01.models;
 
-import singletons.FacebookDB;
+import java.util.ArrayList;
 
 public class User {
-	private String name;
+	private int id;
 	private String username;
 	private String passwordHash;
 	private String profileImgUrl;
+	private ArrayList<User> friends;
 	
 	public User () {
-		name = "Default Name";
-		username = "defualt_username";
-		profileImgUrl = "default_img_url";
+		this.id = 0;
+		this.username = "defualt_username";
+		this.profileImgUrl = "default_img_url";
+		
 		
 	}
 	
-	public User (String uname, String url) {
-		username = uname;
-		profileImgUrl = url;
+	public User (int id, String uname, String url) {
+		this.id = id;
+		this.username = uname;
+		this.profileImgUrl = url;
+		this.friends = new ArrayList<>();
 	}
 
-	public String getName() {
-		return name;
+	public int getId() {
+		return id;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public void setId(int id) {
+		this.id = id;
 	}
-
+	
 	public String getUsername() {
 		return username;
 	}

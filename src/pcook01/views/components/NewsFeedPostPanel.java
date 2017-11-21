@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import pcook01.models.Post;
 import singletons.Decorator;
 
 public class NewsFeedPostPanel extends JPanel {
@@ -19,14 +20,7 @@ public class NewsFeedPostPanel extends JPanel {
 	private JTextArea userPost;
 	private JPanel postAddOns;
 	
-	private static String defaultUser = "Default User";
-	private static String defaultPost = "Default post, pretty creative right?!";
-	
-	public NewsFeedPostPanel() {
-		this(defaultUser, defaultPost);
-	}
-	
-	public NewsFeedPostPanel (String userStr, String userPostStr) {
+	public NewsFeedPostPanel (Post post) {
 		setLayout(new BorderLayout(0, 0));
 		setBackground(Color.white);
 		
@@ -34,11 +28,12 @@ public class NewsFeedPostPanel extends JPanel {
 		postAddOns.setLayout(new BorderLayout());
 		postAddOns.setBackground(Color.white);
 		
-		user = new JLabel(userStr);
+		user = new JLabel(post.getOwner());
 		user.setBorder(new EmptyBorder(0,0,5,0));
 		
 		userPost = new JTextArea();
-		userPost.setText(userPostStr);
+		userPost.setText(post.getPost());
+		userPost.setEditable(false);
 		
 		ImageIcon image = new ImageIcon("src/images/thumbs-up-icon.png");
 		JButton likeButton = new JButton("Like", image);
@@ -55,6 +50,14 @@ public class NewsFeedPostPanel extends JPanel {
 	}
 	
 	 public Dimension getPreferredSize() {
+         return new Dimension(getWidth(), 100);
+     }
+	 
+	 public Dimension getMaximumSize() {
+         return new Dimension(getWidth(), 100);
+     }
+	 
+	 public Dimension getMinimumSize() {
          return new Dimension(getWidth(), 100);
      }
  }

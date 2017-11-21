@@ -89,6 +89,7 @@ public class Facebook {
 			break;
 		case HOME:
 			homeView = new HomeView();
+			homeController = new HomeController(this, user, homeView);
 			rootPanel = homeView;
 			break;
 		case USER:
@@ -116,10 +117,6 @@ public class Facebook {
 	public void changeState(State newState) {
 		state = newState;
 		initialize();
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
 	}
 	
 	public enum State {
