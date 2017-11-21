@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import pcook01.models.User;
 import pcook01.views.components.CenterPanel;
 import pcook01.views.components.SidePanel;
 import pcook01.views.components.TopPanel;

@@ -24,6 +24,7 @@ public class LoginView extends JPanel {
 	private JLabel passwordLabel;
 	private JButton loginButton;
 	private JButton cancelButton;
+	private JButton signupButton;
 
 	public LoginView() {
 		JPanel wrapper = new JPanel(new BorderLayout());
@@ -57,24 +58,14 @@ public class LoginView extends JPanel {
 		panel.add(userPassField, gbc);
 
 		loginButton = new JButton("Login");
-
-		loginButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
-
 		cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
+		signupButton = new JButton("Signup");
 
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
 
 		JPanel buttons = new JPanel();
 		buttons.add(loginButton);
 		buttons.add(cancelButton);
+		buttons.add(signupButton);
 		
 		appNameHeader = new JLabel("Facebook", JLabel.CENTER);
 		Decorator.setBoldWithSize(appNameHeader, 32);
@@ -93,11 +84,19 @@ public class LoginView extends JPanel {
 		loginButton.addActionListener(a);
 	}
 	
+	public void addCancelListener(ActionListener a) {
+		cancelButton.addActionListener(a);
+	}
+	
+	public void addSignupListener(ActionListener a) {
+		signupButton.addActionListener(a);
+	}
+	
 	public String getUsernameInput() {
 		return userTextField.getText();
 	}
 	
 	public String getPasswordInput() {
-		return userPassField.getPassword().toString();
+		return new String(userPassField.getPassword());
 	}
 }

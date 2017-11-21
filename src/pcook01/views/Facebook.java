@@ -33,7 +33,7 @@ public class Facebook {
 	private UserView userView;
 	private UserController userController;
 	
-	private User user;
+	private static User user;
 	private State state;
 
 	/**
@@ -82,7 +82,9 @@ public class Facebook {
 			rootPanel = loginView;
 			break;
 		case SIGNUP:
+			user = new User();
 			signupView = new SignupView();
+			signupController = new SignupController(this, user, signupView);
 			rootPanel = signupView;
 			break;
 		case HOME:
@@ -97,6 +99,9 @@ public class Facebook {
 			settingsView = new SettingsView();
 			rootPanel = settingsView;
 			break;
+		case EXIT:
+			System.out.println("Facebook is closing.");
+			System.exit(0);
 		default:
 			System.err.println("error: Unknown application state.");
 			System.exit(-1);
@@ -113,8 +118,12 @@ public class Facebook {
 		initialize();
 	}
 	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 	public enum State {
-		LOGIN, SIGNUP, HOME, SETTINGS, USER;
+		LOGIN, SIGNUP, HOME, SETTINGS, USER, EXIT;
 	}
 
 }

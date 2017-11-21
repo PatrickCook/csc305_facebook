@@ -5,20 +5,18 @@ import singletons.FacebookDB;
 public class User {
 	private String name;
 	private String username;
-	private String hashedPassword;
+	private String passwordHash;
 	private String profileImgUrl;
 	
 	public User () {
 		name = "Default Name";
 		username = "defualt_username";
-		hashedPassword = "default_hashed_password";
 		profileImgUrl = "default_img_url";
 		
 	}
 	
-	public User (String uname, String hpass, String url) {
+	public User (String uname, String url) {
 		username = uname;
-		hashedPassword = hpass;
 		profileImgUrl = url;
 	}
 
@@ -38,12 +36,12 @@ public class User {
 		this.username = username;
 	}
 
-	public String getHashedPassword() {
-		return hashedPassword;
+	public String getPasswordHash() {
+		return passwordHash;
 	}
 
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 
 	public String getProfileImgUrl() {
@@ -52,11 +50,5 @@ public class User {
 
 	public void setProfileImgUrl(String profileImgUrl) {
 		this.profileImgUrl = profileImgUrl;
-	}
-	
-	public boolean validateUser(String username, String password) {
-		FacebookDB db = FacebookDB.getInstance();
-		
-		return db.validateUser(username, password);
 	}
 }
