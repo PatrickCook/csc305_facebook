@@ -29,7 +29,9 @@ public class HomeView extends JPanel {
 	private SidePanel sidePanel;
 	private CenterPanel centerPanel;
 	
-	public HomeView () {
+	public HomeView (User user) {
+		this.user = user;
+		
 		topPanel = new TopPanel();
 		sidePanel = new SidePanel();
 		centerPanel = new CenterPanel();
@@ -114,7 +116,7 @@ public class HomeView extends JPanel {
 			
 		}
 		
-		public void refreshFeed(User user) {
+		public void refreshFeed() {
 			newsFeedPanel.populateNewsFeed(user);
 		}
 		
@@ -136,18 +138,30 @@ public class HomeView extends JPanel {
 		}
 	}
 	
+	
 	public class SidePanel extends JPanel {
 		private UserPanel userPanel;
 		private FriendList friendsPanel;
 		
 		public SidePanel() {
-			userPanel = new UserPanel();
-			friendsPanel = new FriendList();
+			userPanel = new UserPanel(user);
+			friendsPanel = new FriendList(user);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			
 			this.add(userPanel);
 			this.add(friendsPanel);
 		
+		}
+		public void loadUserFriends() {
+			friendsPanel.loadUserFriends();
+		}
+		
+		public void reloadProfilePhoto() {
+			userPanel.reloadProfilePhoto();
+		}
+		
+		public void addUploadListener(ActionListener e) {
+			userPanel.addUploadListener(e);
 		}
 	}
 }

@@ -88,7 +88,7 @@ public class Facebook {
 			rootPanel = signupView;
 			break;
 		case HOME:
-			homeView = new HomeView();
+			homeView = new HomeView(user);
 			homeController = new HomeController(this, user, homeView);
 			rootPanel = homeView;
 			break;

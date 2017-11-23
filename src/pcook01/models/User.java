@@ -12,9 +12,7 @@ public class User {
 	public User () {
 		this.id = 0;
 		this.username = "defualt_username";
-		this.profileImgUrl = "default_img_url";
-		
-		
+		this.profileImgUrl = "src/images/user-icon.png";
 	}
 	
 	public User (int id, String uname, String url) {
@@ -53,6 +51,8 @@ public class User {
 	}
 
 	public void setProfileImgUrl(String profileImgUrl) {
+		if (profileImgUrl == null) return;
+		
 		this.profileImgUrl = profileImgUrl;
 	}
 }

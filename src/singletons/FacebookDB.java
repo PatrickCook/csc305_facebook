@@ -42,7 +42,7 @@ public class FacebookDB {
 
 	public boolean validateUser(User user, String username, String password) {
 		int id;
-		String sql, token;
+		String sql, token, profileImgUrl;
 		sql = "SELECT * FROM Users WHERE username=?";
 
 		System.out.println(username + password);
@@ -54,9 +54,12 @@ public class FacebookDB {
 			if (rs.next()) {
 				id = rs.getInt("id");
 				token = rs.getString("password_hash");
+				profileImgUrl = rs.getString("profile_image_url");
+				
 				if (PasswordAuth.check(password, token)) {
 					user.setId(id);
 					user.setUsername(username);
+					user.setProfileImgUrl(profileImgUrl);
 					
 					System.out.println("User authenticated.");
 					return true;
@@ -148,7 +151,7 @@ public class FacebookDB {
 		
 		sql = "SELECT  DISTINCT u1.username, p.post\n" + 
 				"FROM Users u\n" + 
-				"INNER JOIN Friends f ON u.id = f.friend_a\n" + 
+				"INNER JOIN Friends f ON u.id = f.friend_a OR u.id = f.friend_b\n" + 
 				"INNER JOIN Posts p ON p.user_id = f.friend_a OR p.user_id = friend_b\n" + 
 				"INNER JOIN Users u1 ON p.user_id = u1.id\n" + 
 				"WHERE u.id = ? ORDER BY p.created DESC;";
@@ -171,8 +174,67 @@ public class FacebookDB {
 			e.printStackTrace();
 		}
 
-		System.out.println("Could not create post.");
+		System.out.println("Loaded all posts.");
 		
 		return posts;
+	}
+	
+	public ArrayList<User> getAllFriends(User user) {
+		String sql;
+		ArrayList<User> friends = new ArrayList<>();
+		
+		sql = "SELECT * FROM \n" + 
+				"(select friend_b as user from Friends\n" + 
+				"where friend_a = ?\n" + 
+				"Union All\n" + 
+				"select friend_a as user from Friends\n" + 
+				"where friend_b = ?) a\n" + 
+				"INNER JOIN Users u ON u.id = a.user;";
+
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, user.getId());
+			pstmt.setInt(2, user.getId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String username = rs.getString("username");
+				String url = rs.getString("profile_image_url");
+				
+				friends.add(new User(id, username, url));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Loaded all friends.");
+		
+		return friends;
+	}
+	
+	public boolean updateUserProfileImage(User user) {
+		String sql;
+		sql = "UPDATE Users SET profile_image_url=? WHERE username=?";
+
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user.getProfileImgUrl());
+			pstmt.setString(2, user.getUsername());
+			
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Could not update user profile image.");
+		return false;
 	}
 }
