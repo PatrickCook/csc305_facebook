@@ -16,12 +16,15 @@ import singletons.Decorator;
 import singletons.FacebookDB;
 
 public class NewsFeedPanel extends JPanel {
-	private ArrayList<NewsFeedPostPanel> newsFeed;
+	private boolean isProfile;
 	private JPanel newsFeedPanel;
 	private JScrollPane scrollable;
 	private JLabel newsFeedHeader;
+	private JLabel message;
 	
-	public NewsFeedPanel () {
+	public NewsFeedPanel (boolean isUserProfile) {
+		isProfile = isUserProfile;
+		
 		setLayout(new BorderLayout(0, 0));
 		newsFeedPanel = new JPanel();
 		
@@ -35,17 +38,27 @@ public class NewsFeedPanel extends JPanel {
 		
 		add(newsFeedHeader, BorderLayout.NORTH);
 		add(scrollable, BorderLayout.CENTER);
-		
-		newsFeed = new ArrayList<>();
 	}
 	
-	public void populateNewsFeed(User user) {
+	public void populateNewsFeed(User user, boolean showWall) {
+		ArrayList<Post> posts;
 		FacebookDB db = FacebookDB.getInstance();
-		ArrayList<Post> posts = db.getAllPosts(user);
 		
 		newsFeedPanel.removeAll();
+		
+		if (showWall && isProfile) {
+			posts = db.getUserPosts(user);
+		} 
+		else if (showWall && !isProfile) {
+			posts = db.getAllPosts(user);
+		} 
+		else {
+			message = new JLabel("Follow " + user.getUsername() + " to see their wall!");
+			newsFeedPanel.add(message);
+			return;
+		}
+		
 		newsFeedPanel.setLayout(new GridLayout(posts.size(), 1, 0, 25));
-		newsFeed.clear();
 		
 		for (Iterator<Post> i = posts.iterator(); i.hasNext(); ) {
 			Post post = i.next();
@@ -53,5 +66,7 @@ public class NewsFeedPanel extends JPanel {
 			newsFeedPanel.add(panel);
 		}
 		
+		revalidate();
+		repaint();
 	}
 }

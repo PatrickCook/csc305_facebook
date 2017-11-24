@@ -6,10 +6,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,6 +28,7 @@ public class FriendList extends JPanel {
 	private JPanel friendListPanel;
 	private ArrayList<User> friends;
 	private GridBagConstraints gbc;
+	private ActionListener selectUserActionListener;
 
 	
 	public FriendList(User user) {
@@ -33,7 +36,8 @@ public class FriendList extends JPanel {
 		
 		setLayout(new BorderLayout());
 		
-		friendListPanel = new JPanel(new GridBagLayout());
+		friendListPanel = new JPanel();
+		friendListPanel.setLayout(new BoxLayout(friendListPanel, BoxLayout.Y_AXIS));
 
 		friends = new ArrayList<>();
 		friendsHeader = new JLabel("Friends:");
@@ -50,7 +54,6 @@ public class FriendList extends JPanel {
 	public void loadUserFriends() {
 		FacebookDB db = FacebookDB.getInstance();
 		friends = db.getAllFriends(user);
-		
 		createFriendList();
 	}
 	
@@ -59,19 +62,16 @@ public class FriendList extends JPanel {
 		
 		for (Iterator<User> i = friends.iterator(); i.hasNext(); ) {
 			User user = i.next();
-			FriendPanel panel = new FriendPanel(user);
-			
-			panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
-			GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = GridBagConstraints.REMAINDER;
-            gbc.anchor = GridBagConstraints.NORTH;
-            gbc.weightx = 1;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            friendListPanel.add(panel, gbc);
-            
-            validate();
-            repaint();
+			FriendPanel panel = new FriendPanel(user, selectUserActionListener);     
+            friendListPanel.add(panel);
 		}
+		
+		validate();
+        repaint();
+	}
+	
+	public void setSelectUserListener(ActionListener e) {
+		selectUserActionListener = e;
 	}
 	
 	 @Override

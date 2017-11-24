@@ -1,6 +1,5 @@
 package pcook01.views;
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,9 +7,10 @@ import javax.swing.JPanel;
 
 import pcook01.controllers.HomeController;
 import pcook01.controllers.LoginController;
+import pcook01.controllers.ProfileController;
 import pcook01.controllers.SettingsController;
 import pcook01.controllers.SignupController;
-import pcook01.controllers.UserController;
+
 import pcook01.models.User;
 
 public class Facebook {
@@ -30,10 +30,10 @@ public class Facebook {
 	private SettingsView settingsView;
 	private SettingsController settingsController;
 	
-	private UserView userView;
-	private UserController userController;
+	private ProfileView profileView;
+	private ProfileController profileController;
 	
-	private static User user;
+	private static User client, selectedUser;
 	private State state;
 
 	/**
@@ -76,25 +76,28 @@ public class Facebook {
 		
 		switch (state) {
 		case LOGIN:
-			user = new User();
+			client = new User();
 			loginView = new LoginView();
-			loginController = new LoginController(this, user, loginView);
+			loginController = new LoginController(this, client, loginView);
 			rootPanel = loginView;
 			break;
 		case SIGNUP:
-			user = new User();
+			client = new User();
 			signupView = new SignupView();
-			signupController = new SignupController(this, user, signupView);
+			signupController = new SignupController(this, client, signupView);
 			rootPanel = signupView;
 			break;
 		case HOME:
-			homeView = new HomeView(user);
-			homeController = new HomeController(this, user, homeView);
+			selectedUser = new User();
+			homeView = new HomeView(client);
+			homeController = new HomeController(this, client, selectedUser, homeView);
 			rootPanel = homeView;
 			break;
-		case USER:
-			userView = new UserView();
-			rootPanel = userView;
+		case USER_PROFILE:
+			System.out.println(selectedUser.getUsername());
+			profileView = new ProfileView(client, selectedUser);
+			profileController = new ProfileController(this, client, selectedUser, profileView);
+			rootPanel = profileView;
 			break;
 		case SETTINGS:
 			settingsView = new SettingsView();
@@ -109,7 +112,6 @@ public class Facebook {
 		}
 		
 		frame.getContentPane().add(rootPanel);
-		
 		frame.revalidate();
 		frame.repaint();
 	}
@@ -120,7 +122,7 @@ public class Facebook {
 	}
 	
 	public enum State {
-		LOGIN, SIGNUP, HOME, SETTINGS, USER, EXIT;
+		LOGIN, SIGNUP, HOME, SETTINGS, USER_PROFILE, EXIT;
 	}
 
 }

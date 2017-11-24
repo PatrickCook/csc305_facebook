@@ -45,7 +45,6 @@ public class FacebookDB {
 		String sql, token, profileImgUrl;
 		sql = "SELECT * FROM Users WHERE username=?";
 
-		System.out.println(username + password);
 		try (Connection conn = this.connect()) {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, username);
@@ -149,16 +148,24 @@ public class FacebookDB {
 		String sql;
 		ArrayList<Post> posts = new ArrayList<>();
 		
-		sql = "SELECT  DISTINCT u1.username, p.post\n" + 
-				"FROM Users u\n" + 
-				"INNER JOIN Friends f ON u.id = f.friend_a OR u.id = f.friend_b\n" + 
-				"INNER JOIN Posts p ON p.user_id = f.friend_a OR p.user_id = friend_b\n" + 
-				"INNER JOIN Users u1 ON p.user_id = u1.id\n" + 
-				"WHERE u.id = ? ORDER BY p.created DESC;";
+		sql = "SELECT DISTINCT * FROM\n" + 
+				"	(SELECT  u1.username, p.post, created\n" + 
+				"	FROM Users u\n" + 
+				"	INNER JOIN Friends f ON u.id = f.friend_a\n" + 
+				"	INNER JOIN Posts p ON p.user_id = f.friend_a OR p.user_id = friend_b\n" + 
+				"	INNER JOIN Users u1 ON p.user_id = u1.id\n" + 
+				"	WHERE u.id = ? \n" + 
+				"	UNION ALL\n" + 
+				"	SELECT username, post, created\n" + 
+				"	FROM Users u\n" + 
+				"	INNER JOIN Posts ON u.id = user_id\n" + 
+				"	WHERE u.id = ?) temp\n" + 
+				"ORDER BY created DESC;";
 
 		try (Connection conn = this.connect()) {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, user.getId());
+			pstmt.setInt(2, user.getId());
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
@@ -179,22 +186,47 @@ public class FacebookDB {
 		return posts;
 	}
 	
-	public ArrayList<User> getAllFriends(User user) {
+	public ArrayList<Post> getUserPosts(User user) {
 		String sql;
-		ArrayList<User> friends = new ArrayList<>();
+		ArrayList<Post> posts = new ArrayList<>();
 		
-		sql = "SELECT * FROM \n" + 
-				"(select friend_b as user from Friends\n" + 
-				"where friend_a = ?\n" + 
-				"Union All\n" + 
-				"select friend_a as user from Friends\n" + 
-				"where friend_b = ?) a\n" + 
-				"INNER JOIN Users u ON u.id = a.user;";
+		sql = "SELECT * FROM Posts WHERE user_id=?";
 
 		try (Connection conn = this.connect()) {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, user.getId());
-			pstmt.setInt(2, user.getId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				String post = rs.getString("post");
+				
+				posts.add(new Post(user.getUsername(), post));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Loaded only user posts.");
+		
+		return posts;
+	}
+	
+	public ArrayList<User> getAllFriends(User user) {
+		String sql;
+		ArrayList<User> friends = new ArrayList<>();
+		
+		sql = "SELECT *\n" + 
+				"FROM Friends \n" + 
+				"INNER JOIN Users ON id = friend_b\n" + 
+				"WHERE friend_a = ?;";
+
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, user.getId());
+
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
@@ -235,6 +267,76 @@ public class FacebookDB {
 		}
 
 		System.out.println("Could not update user profile image.");
+		return false;
+	}
+	
+	public boolean followUser(User userA, User userB) {
+		String sql;
+		
+		sql = "INSERT INTO Friends (friend_a, friend_b) VALUES (?, ?);";
+		
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userA.getId());
+			pstmt.setInt(2, userB.getId());
+
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Could not follow user.");
+		
+		return false;
+	}
+	
+	public void unfollowUser(User userA, User userB) {
+		String sql;
+		
+		sql = "DELETE FROM Friends WHERE friend_a=? AND friend_b=?;";
+		
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userA.getId());
+			pstmt.setInt(2, userB.getId());
+			pstmt.executeUpdate();
+		
+		} catch (SQLException e) {
+			System.out.println("Here???" +e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public boolean isFollowing(User userA, User userB) {
+		String sql;
+		
+		sql = "SELECT * FROM Friends WHERE friend_a=? AND friend_b=?;";
+		
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userA.getId());
+			pstmt.setInt(2, userB.getId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				return true;
+			}
+		
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 }
