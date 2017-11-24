@@ -16,6 +16,7 @@ public class SignupController {
 	private Facebook parent;
 	private User model;
 	private SignupView view;
+	private final int MIN_USERNAME_LENGTH = 6;
 	private final int MIN_PASSWORD_LENGTH = 8;
 	
 	public SignupController(Facebook parent, User user, SignupView view) {
@@ -37,8 +38,14 @@ public class SignupController {
             
             FacebookDB db = FacebookDB.getInstance();
             
+            if (username.length() < MIN_USERNAME_LENGTH) {
+            		JOptionPane.showMessageDialog(view, "Please choose a username longer than " +
+        				MIN_USERNAME_LENGTH + " characters long.");
+            		return;
+            }
+            
             if (password.length() < MIN_PASSWORD_LENGTH) {
-            		JOptionPane.showMessageDialog(view, "Please chose a password longer than " +
+            		JOptionPane.showMessageDialog(view, "Please choose a password longer than " +
             				MIN_PASSWORD_LENGTH + " characters long.");
             		return;
             }
@@ -55,13 +62,11 @@ public class SignupController {
             try {
 				passwordHash = PasswordAuth.getSaltedHash(password);
 				
-				if (db.createUser(username, passwordHash)) {
-					parent.changeState(State.HOME);
-	    				model.setUsername(username);
-				} else {
-					JOptionPane.showMessageDialog(view, "Error occured while creating user");
+				if (db.createUser(model, username, passwordHash)) {
+					System.out.println(model.getId());
+					parent.changeState(State.HOME);		
 				}
-	            
+				
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}    

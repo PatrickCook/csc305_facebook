@@ -61,6 +61,7 @@ public class Facebook {
 		
 		frame = new JFrame();
 		frame.setSize(1000, 800);
+		frame.setResizable(false);
 		rootPanel = new JPanel();
 		
 		initialize();
@@ -100,7 +101,8 @@ public class Facebook {
 			rootPanel = profileView;
 			break;
 		case SETTINGS:
-			settingsView = new SettingsView();
+			settingsView = new SettingsView(client);
+			settingsController = new SettingsController(this, client, settingsView);
 			rootPanel = settingsView;
 			break;
 		case EXIT:

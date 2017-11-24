@@ -22,7 +22,7 @@ import pcook01.models.User;
 import singletons.Decorator;
 import singletons.FacebookDB;
 
-public class FriendList extends JPanel {
+public class FriendListPanel extends JPanel {
 	private User user;
 	private JLabel friendsHeader;
 	private JPanel friendListPanel;
@@ -31,7 +31,7 @@ public class FriendList extends JPanel {
 	private ActionListener selectUserActionListener;
 
 	
-	public FriendList(User user) {
+	public FriendListPanel(User user) {
 		this.user = user;
 		
 		setLayout(new BorderLayout());

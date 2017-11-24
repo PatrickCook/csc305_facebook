@@ -2,6 +2,10 @@ package pcook01.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,15 +34,19 @@ public class HomeController {
 		this.view = view;
 		this.parent = parent;
 
+
+		this.view.getTopPanel().addSearchListener(new SearchListener());
+		this.view.getTopPanel().addSettingsListener(new SettingsListener());
 		this.view.getTopPanel().addSignoutListener(new SignoutListener());
 		this.view.getCenterPanel().addNewPostListener(new NewPostListener());
 		this.view.getSidePanel().addUploadListener(new UploadListener());
 		this.view.getSidePanel().addSelectUserListener(
 				new SelectUserListener());
+		this.view.getSearchResultsPanel().addSelectUserListener(
+				new SelectUserListener());
 		
 		this.view.getCenterPanel().refreshFeed();
-		this.view.getSidePanel().loadUserFriends();
-		
+		this.view.getSidePanel().loadUserFriends();		
 	}
 
 	class SignoutListener implements ActionListener {
@@ -49,6 +57,20 @@ public class HomeController {
     				+ "or you may choose to exit.");
 			
 			parent.changeState(State.LOGIN);
+		}
+	}
+	
+	class SearchListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			String query = view.getTopPanel().getSearchText();
+			view.getSearchResultsPanel().loadSearchResults(query);
+			view.getSearchResultsPanel().setVisible(true);
+		}
+	}
+	
+	class SettingsListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			parent.changeState(State.SETTINGS);
 		}
 	}
 	
@@ -112,5 +134,4 @@ public class HomeController {
 			}
 		}
 	}
-
 }

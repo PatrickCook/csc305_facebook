@@ -95,18 +95,26 @@ public class FacebookDB {
 		return false;
 	}
 	
-	public boolean createUser(String username, String passwordHash) {
-		String sql;
-		sql = "INSERT INTO Users (username, password_hash) VALUES (?, ?);";
+	public boolean createUser(User user, String username, String passwordHash) {
+		String sql1;
+		sql1 = "INSERT INTO Users (username, password_hash) VALUES (?, ?);";
 
 		try (Connection conn = this.connect()) {
-			PreparedStatement pstmt = conn.prepareStatement(sql);
+			PreparedStatement pstmt = conn.prepareStatement(sql1, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, username);
 			pstmt.setString(2, passwordHash);
+			pstmt.executeUpdate();
 			
-			if (pstmt.executeUpdate() > 0) {
-				return true;
+			ResultSet rs = pstmt.getGeneratedKeys();
+			
+			if (rs.next()) {
+			  int id = rs.getInt(1);
+			  user.setId(id);
+			  user.setUsername(username);
+			  
+			  return true;
 			}
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
@@ -248,6 +256,32 @@ public class FacebookDB {
 		return friends;
 	}
 	
+	public boolean updateUser(int id, String username, String hash) {
+		String sql;
+		sql = "UPDATE Users SET "
+				+ "username=?, "
+				+ "password_hash=? "
+				+ "WHERE id=?;";
+
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, hash);
+			pstmt.setInt(3, id);
+			
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Could not update user.");
+		return false;
+	}
+	
 	public boolean updateUserProfileImage(User user) {
 		String sql;
 		sql = "UPDATE Users SET profile_image_url=? WHERE username=?";
@@ -268,6 +302,34 @@ public class FacebookDB {
 
 		System.out.println("Could not update user profile image.");
 		return false;
+	}
+	
+	public void deleteUser(User user) {
+		String sql1, sql2, sql3;
+		
+		sql1 = "DELETE FROM Users WHERE id=?;";
+		sql2 = "DELETE FROM Friends WHERE friend_a=? OR friend_b=?;";
+		sql3 = "DELETE FROM Posts WHERE user_id=?;";
+		
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql1);	
+			pstmt.setInt(1, user.getId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql2);	
+			pstmt.setInt(1, user.getId());
+			pstmt.setInt(2, user.getId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql3);	
+			pstmt.setInt(1, user.getId());
+			pstmt.executeUpdate();
+		
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean followUser(User userA, User userB) {
@@ -309,12 +371,11 @@ public class FacebookDB {
 			pstmt.executeUpdate();
 		
 		} catch (SQLException e) {
-			System.out.println("Here???" +e.getMessage());
+			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	public boolean isFollowing(User userA, User userB) {
 		String sql;
@@ -338,5 +399,32 @@ public class FacebookDB {
 		}
 		
 		return false;
+	}
+	
+	public ArrayList<User> getSearchResults(String query) {
+		String sql;
+		ArrayList<User> results = new ArrayList<>();
+		
+		sql = "SELECT * FROM Users WHERE username LIKE '%"+query+"%';";
+		
+		try (Connection conn = this.connect()) {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String username = rs.getString("username");
+				String url = rs.getString("profile_image_url");
+				
+				results.add(new User(id, username, url));
+			}
+		
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return results;
 	}
 }

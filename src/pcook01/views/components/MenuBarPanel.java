@@ -19,15 +19,15 @@ public class MenuBarPanel extends JPanel {
 		signoutButton = new JButton("Signout");
 		
 		try {
-		    settingsButton.setIcon(new ImageIcon("images/gear-icon.png"));
+		    settingsButton.setIcon(new ImageIcon("src/images/gear-icon.png"));
 		    settingsButton.setBorder(null);
 		} catch (Exception ex) {
 		    System.out.println(ex);
 		}
 		
-		add(settingsButton);
 		add(signoutButton);
-		
+		add(settingsButton);
+				
 		//Set layout for buttons
 		FlowLayout fl_MenuBarRightPanel = (FlowLayout) getLayout();
 		fl_MenuBarRightPanel.setAlignment(FlowLayout.RIGHT);

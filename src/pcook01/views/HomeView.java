@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -17,10 +19,11 @@ import javax.swing.border.EmptyBorder;
 
 import pcook01.models.User;
 import pcook01.views.components.CurrentUserPanel;
-import pcook01.views.components.FriendList;
+import pcook01.views.components.FriendListPanel;
 import pcook01.views.components.MenuBarPanel;
 import pcook01.views.components.NewPostPanel;
 import pcook01.views.components.NewsFeedPanel;
+import pcook01.views.components.SearchResultsPanel;
 import pcook01.views.components.UserPanel;
 import singletons.Decorator;
 
@@ -29,19 +32,33 @@ public class HomeView extends JPanel {
 	private TopPanel topPanel;
 	private SidePanel sidePanel;
 	private CenterPanel centerPanel;
+	private SearchResultsPanel searchResultsPanel;
+	private JLayeredPane layeredPane;
+	private JPanel container;
 	
 	public HomeView (User user) {
 		this.user = user;
 		
+		container = new JPanel();
+		layeredPane = new JLayeredPane();
 		topPanel = new TopPanel();
 		sidePanel = new SidePanel();
 		centerPanel = new CenterPanel();
+		searchResultsPanel = new SearchResultsPanel();
 		
-		setLayout(new BorderLayout(0,0));
+		container.setLayout(new BorderLayout(0,0));
+		container.add(sidePanel, BorderLayout.WEST);
+		container.add(centerPanel, BorderLayout.CENTER);
+		container.add(topPanel, BorderLayout.NORTH);
+		container.setBounds(0, 0, 1000, 800);
 		
-		add(sidePanel, BorderLayout.WEST);
-		add(centerPanel, BorderLayout.CENTER);
-		add(topPanel, BorderLayout.NORTH);
+		searchResultsPanel.setBounds(170, 40, 200, 300);
+		
+		layeredPane.setPreferredSize(new Dimension(1000, 800));
+		layeredPane.add(container, 0);
+		layeredPane.add(searchResultsPanel, 1);
+		
+		add(layeredPane);
 	}
 	
 	public TopPanel getTopPanel() {
@@ -54,11 +71,21 @@ public class HomeView extends JPanel {
 	
 	public CenterPanel getCenterPanel() {
 		return centerPanel;
-	}	
+	}
+	
+	public SearchResultsPanel getSearchResultsPanel() {
+		return searchResultsPanel;
+	}
+	
+	@Override
+	public boolean isOptimizedDrawingEnabled() {
+		return false;
+	}
 	
 	public class TopPanel extends JPanel {
-		private JLabel appNameHeader;
 		private JPanel panel;
+		private JLabel appNameHeader;
+		private JButton searchButton;
 		private JTextField searchTextField;
 		private MenuBarPanel menuBarPanel;
 		
@@ -83,13 +110,21 @@ public class HomeView extends JPanel {
 
 		     panel.add(Box.createRigidArea(new Dimension(6, 0)));
 
-		     JButton findButton = new JButton("Search"); 
-		     panel.add(findButton);
+		     searchButton = new JButton("Search"); 
+		     panel.add(searchButton);
 		     panel.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
 			 
 			 this.add(appNameHeader, BorderLayout.WEST);
 			 this.add(panel, BorderLayout.CENTER);
 			 this.add(menuBarPanel, BorderLayout.EAST);
+		}
+		
+		public String getSearchText() {
+			return searchTextField.getText();
+		}
+		
+		public void addSearchListener(ActionListener e) {
+			searchButton.addActionListener(e);
 		}
 		
 		public void addSignoutListener(ActionListener e) {
@@ -144,11 +179,11 @@ public class HomeView extends JPanel {
 	
 	public class SidePanel extends JPanel {
 		private CurrentUserPanel userPanel;
-		private FriendList friendsPanel;
+		private FriendListPanel friendsPanel;
 		
 		public SidePanel() {
 			userPanel = new CurrentUserPanel(user);
-			friendsPanel = new FriendList(user);
+			friendsPanel = new FriendListPanel(user);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			
 			this.add(userPanel);

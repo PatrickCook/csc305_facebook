@@ -25,7 +25,6 @@ public class ProfileController {
 		this.view = view;
 		this.parent = parent;
 
-		this.view.getTopPanel().addSignoutListener(new SignoutListener());
 		this.view.getSidePanel().addBackListener(new BackListener());
 		this.view.getSidePanel().addFollowListener(new FollowListener());
 		this.view.getCenterPanel().refreshFeed();
@@ -46,7 +45,6 @@ public class ProfileController {
 	class BackListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			user = null;
-
 			parent.changeState(State.HOME);
 		}
 	}
@@ -59,14 +57,11 @@ public class ProfileController {
 			if (clicked.getText().equals("Follow")) {		
 				db.followUser(loggedInUser, user);
 				clicked.setText("Unfollow");
-				JOptionPane.showMessageDialog(view, 
-	    				"You just followed " + user.getUsername() + "!");
-				
+			
 			} else {
 				db.unfollowUser(loggedInUser, user);
 				clicked.setText("Follow");
-				JOptionPane.showMessageDialog(view, 
-	    				"You just unfollowed " + user.getUsername() + "!");
+
 			}
 			
 			view.getCenterPanel().refreshFeed();

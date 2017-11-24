@@ -66,6 +66,7 @@ public class NewsFeedPanel extends JPanel {
 			newsFeedPanel.add(panel);
 		}
 		
+		scrollable.getVerticalScrollBar().setValue(0);
 		revalidate();
 		repaint();
 	}

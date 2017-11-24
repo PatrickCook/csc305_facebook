@@ -66,45 +66,18 @@ public class ProfileView extends JPanel {
 	
 	public class TopPanel extends JPanel {
 		private JLabel appNameHeader;
-		private JPanel panel;
-		private JTextField searchTextField;
-		private MenuBarPanel menuBarPanel;
 		
 		public TopPanel () {
 			 appNameHeader = new JLabel("Facebook");
 			 appNameHeader.setBorder(new EmptyBorder(0,10,0,0));
 			 
-			 menuBarPanel = new MenuBarPanel();
-			 
 			 Decorator.setBoldWithSize(appNameHeader, 26);
 			 appNameHeader.setForeground(Color.WHITE);
+			 
 			 setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
 			 setLayout(new BorderLayout());
-			 
-			 panel = new JPanel();
-		     panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		     panel.setBorder(BorderFactory.createEmptyBorder(6, 30, 6, 6));
 
-		     searchTextField = new JTextField(60);
-		     panel.add(searchTextField);
-
-		     panel.add(Box.createRigidArea(new Dimension(6, 0)));
-
-		     JButton findButton = new JButton("Search"); 
-		     panel.add(findButton);
-		     panel.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
-			 
 			 this.add(appNameHeader, BorderLayout.WEST);
-			 this.add(panel, BorderLayout.CENTER);
-			 this.add(menuBarPanel, BorderLayout.EAST);
-		}
-		
-		public void addSignoutListener(ActionListener e) {
-			menuBarPanel.addSignoutListener(e);
-		}
-		
-		public void addSettingsListener(ActionListener e) {
-			menuBarPanel.addSettingsListener(e);
 		}
 	}
 	
