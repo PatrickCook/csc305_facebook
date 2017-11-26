@@ -52,11 +52,9 @@ public class HomeController {
 	class SignoutListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			client = null;
-			JOptionPane.showMessageDialog(view, 
-    				"Just logged out! Please sign in to continue "
-    				+ "or you may choose to exit.");
+			JOptionPane.showMessageDialog(view, "Just logged out!");
 			
-			parent.changeState(State.LOGIN);
+			parent.changeState(State.EXIT);
 		}
 	}
 	
