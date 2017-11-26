@@ -13,6 +13,12 @@ import pcook01.controllers.SignupController;
 
 import pcook01.models.User;
 
+
+/**
+ * Root view for application. Responsible for holding all
+ * children views. Utilizes states to organize view changes
+ * @author patrickcook
+ */
 public class Facebook {
 	
 	private JFrame frame;
@@ -121,6 +127,14 @@ public class Facebook {
 	public void changeState(State newState) {
 		state = newState;
 		initialize();
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	public JFrame getFrame() {
+		return frame;
 	}
 	
 	public enum State {

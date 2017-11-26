@@ -59,7 +59,7 @@ public class SettingsController {
 			try {
 				passwordHash = PasswordAuth.getSaltedHash(password);
 
-				if (db.updateUser(client.getId(), username, passwordHash)) {
+				if (db.updateUser(client, username, passwordHash)) {
 					JOptionPane.showMessageDialog(view, "Your changes have been saved!");
 					client.setUsername(username);
 				} else {

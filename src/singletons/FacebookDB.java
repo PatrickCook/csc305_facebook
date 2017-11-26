@@ -256,7 +256,7 @@ public class FacebookDB {
 		return friends;
 	}
 	
-	public boolean updateUser(int id, String username, String hash) {
+	public boolean updateUser(User user,  String username, String hash) {
 		String sql;
 		sql = "UPDATE Users SET "
 				+ "username=?, "
@@ -267,9 +267,10 @@ public class FacebookDB {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, username);
 			pstmt.setString(2, hash);
-			pstmt.setInt(3, id);
+			pstmt.setInt(3, user.getId());
 			
 			if (pstmt.executeUpdate() > 0) {
+				user.setUsername(username);
 				return true;
 			}
 		} catch (SQLException e) {
