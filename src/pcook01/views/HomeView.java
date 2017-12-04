@@ -106,6 +106,7 @@ public class HomeView extends JPanel {
 
 
 		     searchTextField = new JTextField(60);
+		     searchTextField.setText("Search...");
 		     panel.add(searchTextField);
 
 		     panel.add(Box.createRigidArea(new Dimension(6, 0)));

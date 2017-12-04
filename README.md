@@ -1,10 +1,14 @@
-# CSC 305 Facebook:
+# Facebook - Java Swing Project:
+Author: Patrick Cook
+Class: CSC-305
+Date: December 2, 2017
 
 ## To Run:
 - Open project using Eclipse
 - Ensure database exists in the /src/db/ folder. If it does not exist the application will create one on start
 - Run project by starting the /src/pcook01/views/Facebook.java file
     - This is the main view and contains a main() method.
+- Login using 'pcook01' and 'password
 
 ## Navigating Project:
 The project has been split up into 5 different packages, 4 main packages and the last being a sub-package.
@@ -44,3 +48,9 @@ There were a few hidden design patters that don't necessarily jump out at you wh
 - Command Pattern: whenever an action occurs the execution of that action is carried out by the controller instead of the view. The view has a list of "actions" and has the ability to delegate the handling of those actions to the controller.
 - Composition: Each view contains references to each of the children components as well as the parent component. This increases the cohesiveness of my code by truly separating the root views.
 - Observer Pattern: Each component contained listeners. This allowed many of my components to be notified when an event occurred as well as responding to this event.
+
+
+## Testing Notes
+This section is to explain the testing suite. I realize there lack of testing files and I wanted to clarify that this was not because I ran out of time. While creating the test suite, I had a difficult time figuring out how to test my views. For a few tests I ended up having to refactor code so that I would have access to certain variables in order to test functionality. This lead to a lot of unnecessary code that wasn't used anywhere else except for the testing.
+
+Due to this, I decided to test the sections that mattered, the data flow. I created an extensive database testing suite and model tests. I also added a HomeViewTest to illustrate that it was possible to test my views, the tests just weren't helpful and were extremely trivial. 

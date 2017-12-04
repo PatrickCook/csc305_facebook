@@ -101,7 +101,6 @@ public class Facebook {
 			rootPanel = homeView;
 			break;
 		case USER_PROFILE:
-			System.out.println(selectedUser.getUsername());
 			profileView = new ProfileView(client, selectedUser);
 			profileController = new ProfileController(this, client, selectedUser, profileView);
 			rootPanel = profileView;

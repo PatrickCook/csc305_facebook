@@ -29,8 +29,8 @@ public class MenuBarPanel extends JPanel {
 		add(settingsButton);
 				
 		//Set layout for buttons
-		FlowLayout fl_MenuBarRightPanel = (FlowLayout) getLayout();
-		fl_MenuBarRightPanel.setAlignment(FlowLayout.RIGHT);
+		FlowLayout fl = (FlowLayout) getLayout();
+		fl.setAlignment(FlowLayout.RIGHT);
 	}
 	
 	public void addSignoutListener(ActionListener e) {

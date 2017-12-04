@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import singletons.Decorator;
 
-public class NewPostPanel extends JPanel implements FocusListener {
+public class NewPostPanel extends JPanel {
 	private JLabel newPostHeader;
 	private JTextPane newPostTextPane;
 	private JButton newPostButton;
@@ -33,14 +33,11 @@ public class NewPostPanel extends JPanel implements FocusListener {
 		newPostTextPane.setText("Whats on your mind?");
 		newPostButton = new JButton("Post");
 		
-		newPostTextPane.addFocusListener(this);
-		
 		add(newPostHeader, BorderLayout.NORTH);
 		add(newPostTextPane, BorderLayout.CENTER);
 		add(newPostButton, BorderLayout.EAST);
 		add(verticalStrut, BorderLayout.SOUTH);
 	}
-	
 	
 	
 	public void addNewPostListener(ActionListener e) {
@@ -54,9 +51,5 @@ public class NewPostPanel extends JPanel implements FocusListener {
 	public void focusGained(FocusEvent e) {
 		newPostTextPane.setText("");
 	}
-	
-	@Override
-	public void focusLost(FocusEvent e) {
-		
-	}
-	}
+
+}

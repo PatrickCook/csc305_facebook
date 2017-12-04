@@ -49,7 +49,7 @@ public class HomeController {
 		this.view.getSidePanel().loadUserFriends();		
 	}
 
-	class SignoutListener implements ActionListener {
+	public class SignoutListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			client = null;
 			JOptionPane.showMessageDialog(view, "Just logged out!");
@@ -58,7 +58,7 @@ public class HomeController {
 		}
 	}
 	
-	class SearchListener implements ActionListener {
+	public class SearchListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String query = view.getTopPanel().getSearchText();
 			view.getSearchResultsPanel().loadSearchResults(query);
@@ -66,13 +66,13 @@ public class HomeController {
 		}
 	}
 	
-	class SettingsListener implements ActionListener {
+	public class SettingsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			parent.changeState(State.SETTINGS);
 		}
 	}
 	
-	class SelectUserListener implements ActionListener {
+	public class SelectUserListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			FriendPanel fp = (FriendPanel) e.getSource();
 			User f = fp.getFriend();
@@ -132,4 +132,8 @@ public class HomeController {
 			}
 		}
 	}
-}
+	
+	public User getSelectedUser() {
+		return selectedUser;
+	}
+ }
