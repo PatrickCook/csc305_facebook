@@ -120,13 +120,13 @@ public class HomeController {
 				
 				try {
 					ImageResizer.resize(src.getPath(), dest, 100, 100);
+					client.setProfileImgUrl(dest);
+					view.getSidePanel().reloadProfilePhoto();
+					db.updateUserProfileImage(client);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				
-				client.setProfileImgUrl("src/images/users/"+ client.getUsername() + ".png");
-				view.getSidePanel().reloadProfilePhoto();
-				db.updateUserProfileImage(client);
+	
 			} else {
 				System.out.println("Open command cancelled by user.");
 			}

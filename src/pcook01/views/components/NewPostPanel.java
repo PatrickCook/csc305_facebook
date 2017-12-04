@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import singletons.Decorator;
 
-public class NewPostPanel extends JPanel {
+public class NewPostPanel extends JPanel implements FocusListener {
 	private JLabel newPostHeader;
 	private JTextPane newPostTextPane;
 	private JButton newPostButton;
@@ -47,9 +47,15 @@ public class NewPostPanel extends JPanel {
 	public String getNewPostText() {
 		return newPostTextPane.getText();
 	}
-
+	
+	@Override
 	public void focusGained(FocusEvent e) {
 		newPostTextPane.setText("");
 	}
 
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		
+	}
 }

@@ -42,7 +42,7 @@ public class User {
 
 	public void setProfileImgUrl(String profileImgUrl) {
 		if (profileImgUrl == null) return;
-		
+
 		this.profileImgUrl = profileImgUrl;
 	}
 }

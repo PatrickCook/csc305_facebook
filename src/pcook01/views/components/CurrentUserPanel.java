@@ -15,6 +15,7 @@ import singletons.Decorator;
 
 public class CurrentUserPanel extends JPanel {
 	private User user;
+	private ImageIcon image;
 	private JLabel userHeader;
 	private JLabel profileImage;
 	private JPanel profileImagePanel;
@@ -32,7 +33,7 @@ public class CurrentUserPanel extends JPanel {
 		
 		Decorator.setBoldWithSize(userHeader, 16);
 		
-		ImageIcon image = new ImageIcon(user.getProfileImgUrl());
+		image = new ImageIcon(user.getProfileImgUrl());
 		profileImage = new JLabel("", image, JLabel.CENTER);
 		profileImage.setPreferredSize(new Dimension(100,100));
 		
@@ -51,7 +52,8 @@ public class CurrentUserPanel extends JPanel {
 	public void reloadProfilePhoto() {
 		profileImagePanel.removeAll();
 		
-		ImageIcon image = new ImageIcon(user.getProfileImgUrl());
+		image.getImage().flush();
+		image = new ImageIcon(user.getProfileImgUrl());
 		profileImage = new JLabel("", image, JLabel.CENTER);
 		profileImage.setPreferredSize(new Dimension(100,100));
 		

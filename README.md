@@ -3,12 +3,13 @@ Author: Patrick Cook
 Class: CSC-305
 Date: December 2, 2017
 
+
 ## To Run:
 - Open project using Eclipse
 - Ensure database exists in the /src/db/ folder. If it does not exist the application will create one on start
 - Run project by starting the /src/pcook01/views/Facebook.java file
     - This is the main view and contains a main() method.
-- Login using 'pcook01' and 'password
+#### Important: Login using 'pcook01' and 'password
 
 ## Navigating Project:
 The project has been split up into 5 different packages, 4 main packages and the last being a sub-package.
